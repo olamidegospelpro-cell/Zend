@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="Fast, private peer-to-peer file and text transfers. No accounts, no upload queue.">
+  <title>Zend — send it, simply</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Zend home"><span class="brand-mark">z</span><span>zend<span class="brand-dot">.</span></span></a>
+      <div class="top-actions"><span class="privacy-pill"><i></i> Peer-to-peer · private</span><button class="icon-button" id="feedbackOpen" aria-label="Send feedback" title="Send feedback">♡</button></div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">NO ACCOUNTS. NO WAITING.</p>
+        <h1>Move it.<br><span>Like magic.</span></h1>
+        <p class="hero-copy">Send files and text directly between your devices. Fast, private, and beautifully simple.</p>
+      </section>
+
+      <section class="connect-card" aria-labelledby="connectHeading">
+        <div class="card-heading"><div><p class="eyebrow">GET CONNECTED</p><h2 id="connectHeading">Two devices, one tap.</h2></div><span class="step-badge">01</span></div>
+        <div class="connection-grid">
+          <div class="connection-side receiver-side">
+            <div class="side-title"><span class="device-icon">⌂</span><div><h3>Receive</h3><p>Open a room on this device</p></div></div>
+            <button class="button button-dark" id="createRoom">Create a room <span>↗</span></button>
+            <div class="room-display hidden" id="roomDisplay"><div><span class="muted-label">YOUR ROOM CODE</span><strong id="roomCode">-----</strong></div><button class="copy-button" id="copyRoom" aria-label="Copy room code">Copy</button></div>
+            <div class="qr-wrap hidden" id="qrWrap"><div id="qrcode" aria-label="QR code to join this room"></div><span>Scan with your other device</span></div>
+          </div>
+          <div class="divider"><span>OR</span></div>
+          <div class="connection-side sender-side">
+            <div class="side-title"><span class="device-icon">⌁</span><div><h3>Send</h3><p>Enter the code from the other device</p></div></div>
+            <label class="muted-label" for="joinCode">5-CHARACTER ROOM CODE</label>
+            <div class="code-entry"><input id="joinCode" maxlength="5" autocomplete="off" autocapitalize="characters" placeholder="ABCDE" aria-label="Room code"><button class="button button-accent" id="joinRoom">Connect <span>→</span></button></div>
+            <p class="connection-hint" id="connectionStatus" aria-live="polite">Both devices need an internet connection to establish a room. Transfers go directly between devices.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="signal-warning hidden" id="signalWarning" role="alert"><span class="warning-icon">!</span><div><strong>Signal dropping</strong><span>Keep devices close together!</span></div><button id="dismissWarning" aria-label="Dismiss warning">×</button></div>
+
+      <section class="transfer-grid">
+        <article class="panel file-panel">
+          <div class="panel-heading"><div><p class="eyebrow">ANYTHING GOES</p><h2>Send files</h2></div><span class="panel-icon">↥</span></div>
+          <label class="drop-zone" id="dropZone" for="fileInput"><span class="upload-icon">↑</span><strong>Drop files here</strong><span>or <u>browse your device</u></span><small>Any format · Multiple files · Large transfers supported</small></label>
+          <input id="fileInput" type="file" multiple hidden>
+          <div class="file-list hidden" id="fileList"></div>
+          <div class="transfer-tools"><label class="toggle-row"><span>Sound alert</span><input type="checkbox" id="soundToggle" checked><span class="toggle"></span></label><span class="speed-readout" id="speedReadout">Ready when you are</span></div>
+          <div class="progress-track hidden" id="progressTrack"><div id="progressFill"></div></div>
+          <div class="transfer-meta hidden" id="transferMeta"><span id="progressLabel">Preparing…</span><span id="rttLabel">RTT —</span></div>
+        </article>
+
+        <article class="panel text-panel">
+          <div class="panel-heading"><div><p class="eyebrow">THE QUICK THING</p><h2>Instant text</h2></div><span class="panel-icon">✳</span></div>
+          <p class="text-intro">A link, a note, a clipboard snippet. Send it instantly.</p>
+          <textarea id="textMessage" rows="5" maxlength="100000" placeholder="Paste or type something…" aria-label="Text or link to send"></textarea>
+          <div class="text-actions"><span class="char-count" id="charCount">0 / 100,000</span><button class="button button-accent" id="sendText">Send text <span>→</span></button></div>
+          <div class="received-text hidden" id="receivedText"><div class="received-heading"><strong>Received text</strong><button class="copy-button" id="copyText">Copy</button></div><pre id="receivedTextContent"></pre></div>
+        </article>
+      </section>
+
+      <section class="how-it-works"><div class="how-copy"><p class="eyebrow">MADE FOR THE MOMENT</p><h2>Your files stay<br>yours.</h2><p>Zend connects your devices directly. Your transfer isn't uploaded to a cloud storage service or kept on a server.</p></div><div class="feature-list"><div><span>01</span><p><strong>Pair in seconds</strong><br>Scan the QR code or enter the short room code.</p></div><div><span>02</span><p><strong>Send without limits</strong><br>Photos, videos, documents, folders of files — you choose.</p></div><div><span>03</span><p><strong>Direct device-to-device</strong><br>Transfer data is peer-to-peer. A connection may relay if a direct route isn't available.</p></div></div></section>
+    </main>
+
+    <footer><span>© <span id="year"></span> Zend</span><span>Brought to you by the creative minds at <a href="https://gospelco.com.ng" target="_blank" rel="noopener noreferrer">GospelCO</a></span><button class="footer-feedback" id="feedbackFooter">Send feedback</button></footer>
+  </div>
+
+  <dialog id="feedbackDialog" class="modal"><form id="feedbackForm"><button class="modal-close" type="button" id="feedbackClose" aria-label="Close">×</button><p class="eyebrow">WE'RE LISTENING</p><h2>Make Zend better.</h2><p class="modal-copy">Send us a note or leave your WhatsApp number and we’ll get back to you.</p><label for="feedbackMessage">Your message</label><textarea id="feedbackMessage" name="message" rows="4" required maxlength="5000" placeholder="Tell us what you think…"></textarea><label for="feedbackPhone">WhatsApp number <span>(optional)</span></label><input id="feedbackPhone" name="whatsapp" type="tel" autocomplete="tel" placeholder="+234…"><input type="hidden" name="_subject" value="Zend feedback"><input type="hidden" name="_captcha" value="false"><button class="button button-accent submit-feedback" type="submit">Send feedback <span>→</span></button><p class="form-status" id="feedbackStatus" aria-live="polite"></p><small>Sent to hello@gospelco.com.ng via FormSubmit. Your email app or FormSubmit may require a one-time confirmation.</small></form></dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript">Zend needs JavaScript enabled to connect your devices.</p></noscript>
+</body>
+</html>
